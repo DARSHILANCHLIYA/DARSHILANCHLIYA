@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOB Digital Sum</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #ff5f6d, #ffc371);
+            color: #fff;
+            margin: 0;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 1200px;
+            height: auto;
+            position: relative;
+            margin: 5% auto;
+        }
+
+        .alphabet-table, .container, .results {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border: 3px solid #ffffff;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            margin: 15px 0;
+            transition: transform 0.3s ease, z-index 0.3s ease;
+            z-index: 1;
+        }
+
+        .alphabet-table {
+            width: 100%;
+        }
+
+        .container {
+            width: 100%;
+        }
+
+        .results {
+            width: 100%;
+        }
+
+        .alphabet-table:hover, .container:hover, .results:hover {
+            transform: scale(1.05);
+            z-index: 3;
+        }
+
+        .alphabet-table:not(:hover), .container:not(:hover), .results:not(:hover) {
+            transform: scale(0.95);
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label, input, select, button {
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+
+        input, select, button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+            background-color: #fff;
+            color: #000;
+        }
+
+        button {
+            background-color: #ff5f6d;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ffc371;
+        }
+
+        #result p {
+            font-size: 1.2em;
+            margin: 10px 0;
+            text-shadow: 1px 1px 3px #000;
+        }
+
+        .alphabet-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .alphabet-table th, .alphabet-table td {
+            border: 1px solid #fff;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .alphabet-table th {
+            background-color: #ff5f6d;
+        }
+
+        @media (max-width: 768px) {
+            .alphabet-table, .container, .results {
+                max-width: 90%;
+                width: 100%;
+                margin: 10px 0;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            input, select, button {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2em;
+            }
+
+            .alphabet-table, .container, .results {
+                padding: 10px;
+                margin: 5px 0;
+            }
+
+            input, select, button {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+
+            #result p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="alphabet-table">
+            <h2>Alphabet Values</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Letter</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>A, I, J, Q, Y</td><td>1</td></tr>
+                    <tr><td>B, K, R</td><td>2</td></tr>
+                    <tr><td>C, G, L, S</td><td>3</td></tr>
+                    <tr><td>D, M, T</td><td>4</td></tr>
+                    <tr><td>E, H, N, X</td><td>5</td></tr>
+                    <tr><td>U, V, W</td><td>6</td></tr>
+                    <tr><td>O, Z</td><td>7</td></tr>
+                    <tr><td>F, P</td><td>8</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="container">
+            <form id="dobForm">
+                <label for="dob">Enter your Date of Birth:</label>
+                <input type="date" id="dob" name="dob" required>
+                <label for="gender">Select your Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="" disabled selected>Select your gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+                <label for="firstName">Enter your First Name:</label>
+                <input type="text" id="firstName" name="firstName" required>
+                <label for="middleName">Enter your Middle Name (optional):</label>
+                <input type="text" id="middleName" name="middleName">
+                <label for="surname">Enter your Surname:</label>
+                <input type="text" id="surname" name="surname" required>
+                <button type="button" onclick="calculateDigitalSum()">Submit</button>
+            </form>
+        </div>
+        <div class="results">
+            <h2>Results</h2>
+            <p id="driverNo"></p>
+            <p id="conductorNo"></p>
+            <p id="kuaNo"></p>
+            <p id="nameSum"></p>
+            <p id="middleNameSum"></p>
+            <p id="surnameSum"></p>
+            <p id="fullNameSum"></p>
+        </div>
+    </div>
+    <script>
+        function calculateDigitalSum() {
+            const dob = document.getElementById('dob').value;
+            const gender = document.getElementById('gender').value;
+            const firstName = document.getElementById('firstName').value.toUpperCase();
+            const middleName = document.getElementById('middleName').value.toUpperCase();
+            const surname = document.getElementById('surname').value.toUpperCase();
+
+            if (!dob || !gender || !firstName || !surname) {
+                alert('Please complete all required fields.');
+                return;
+            }
+
+            const date = new Date(dob);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1; // Months are 0-indexed
+            const day = date.getDate();
+
+            let kuaNo = getDigitalSum(year);
+            const fullDobSum = getDigitalSum(day) + getDigitalSum(month) + getDigitalSum(year);
+            const conductorNo = getDigitalSum(fullDobSum);
+            const driverNo = getDigitalSum(day);
+
+            if (gender === 'male') {
+                kuaNo = 11 - kuaNo;
+            } else if (gender === 'female') {
+                kuaNo += 4;
+            }
+            kuaNo = getDigitalSum(kuaNo); // To ensure kuaNo is a single digit
+
+            const nameSum = calculateNameSum(firstName);
+            const middleNameSum = calculateNameSum(middleName);
+            const surnameSum = calculateNameSum(surname);
+            const fullNameSum = nameSum + middleNameSum + surnameSum;
+
+            document.getElementById('driverNo').innerText = `DRIVER NO.: ${driverNo}`;
+            document.getElementById('conductorNo').innerText = `CONDUCTOR NO.: ${conductorNo}`;
+            document.getElementById('kuaNo').innerText = `KUA NO.: ${kuaNo}`;
+            document.getElementById('nameSum').innerText = `First Name Sum: ${nameSum}`;
+            document.getElementById('middleNameSum').innerText = `Middle Name Sum: ${middleNameSum}`;
+            document.getElementById('surnameSum').innerText = `Surname Sum: ${surnameSum}`;
+            document.getElementById('fullNameSum').innerText = `Full Name Sum: ${fullNameSum}`;
+        }
+
+        function getDigitalSum(number) {
+            let sum = 0;
+            while (number > 0) {
+                sum += number % 10;
+                number = Math.floor(number / 10);
+            }
+            return sum >= 10 ? getDigitalSum(sum) : sum;
+        }
+
+        function calculateNameSum(name) {
+            const nameValues = {
+                'A': 1, 'I': 1, 'J': 1, 'Q': 1, 'Y': 1,
+                'B': 2, 'K': 2, 'R': 2,
+                'C': 3, 'G': 3, 'L': 3, 'S': 3,
+                'D': 4, 'M': 4, 'T': 4,
+                'E': 5, 'H': 5, 'N': 5, 'X': 5,
+                'U': 6, 'V': 6, 'W': 6,
+                'O': 7, 'Z': 7,
+                'F': 8, 'P': 8
+            };
+
+            let sum = 0;
+            for (let char of name) {
+                sum += nameValues[char] || 0;
+            }
+            return sum;
+        }
+    </script>
+</body>
+</html>
